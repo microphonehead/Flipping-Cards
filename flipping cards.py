@@ -709,6 +709,132 @@ def cards_paint_active_cards():
 
 
 
+# ---------------------------------------------------------------------------
+# Summary:
+#   This rountine inserts a new high score into the hi-score table.
+# ---------------------------------------------------------------------------
+def hstable_insert(n_name, n_score):
+    fnd =False
+    ip =False       # insertion pointer
+
+    # search the hst for a place to insert the new rec. 
+    for ip in range(len(hst) +1): 
+        c_name, c_score =hst[ip]
+        if n_score > c_score: # we've found the insertion point.
+            fnd =True
+            break
+
+    if fnd ==True: # an insertion point was found.
+        hst.insert(ip, (n_name, n_score))   # insert the new high score record.
+        hst.pop()                           # delete the last hs record from the list.
+
+# hstable_insert(~) ---------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This rountine looks at the hi-score table and searches for the lowest
+#   score, and returns it to the calling routine.
+# ---------------------------------------------------------------------------
+def hstable_min_get():
+    lscore =-1
+    for pname, pscore in hst:
+        if pscore <lscore or lscore ==-1: # we've found a new high.
+            lscore =pscore
+
+    # return the lowest score.
+    return lscore
+# hstable_min_get() ---------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This rountine saves the hi-score table.
+# ---------------------------------------------------------------------------
+def hstable_save():
+    file_a =open("hiscore.txt", mode="w", encoding="utf-8")
+    for pname, pscore in hst:
+        # write the rec to file with padded spaces so we can read
+        # it back easier.
+        file_a.write("{0:40}".format(pname))
+        file_a.write("{0:10}".format(str(pscore)))
+    file_a.close()
+# hstable_save() ------------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This rountine loads the hi-score table.
+# ---------------------------------------------------------------------------
+def hstable_load():
+    global hst
+    
+    #debug_hst(hst)
+    try:
+        file_a =open("hiscore.txt", encoding="utf-8")
+    except:
+        # file can't be loaded. Skip it.
+        return False
+    
+    hst =[] # reset/clear the variable for the hs table.
+
+    # reload the hs table from the existing file.
+    for cntr in range(5):
+        pname =file_a.read(40)          # load the player's name.
+        pscore =int(file_a.read(10))    # load the score for that player.
+
+        hst.append([pname, pscore])     # update hst with new record.
+    file_a.close()
+    #debug_hst(hst)
+
+    return True
+# hstable_load() ------------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This rountine paints the hi-score table.
+# ---------------------------------------------------------------------------
+def hstable_paint():
+    lnmargin =3
+    rmargin =550
+    
+    y =40
+    
+    # write all the status msg's to the screen...
+    for l in range(len(hst)):
+        # render the end of stage message.
+        pname, pscore =hst[l]
+        img_gn_surf = fnt_title.render(pname, True, BLUE)
+        img_rect =img_gn_surf.get_rect()
+        img_rect.topleft = (50, y)
+        DISPLAYSURF.blit(img_gn_surf, img_rect)
+
+        img_gn_surf = fnt_title.render(str(pscore), True, BLUE)
+        img_rect =img_gn_surf.get_rect()
+        img_rect.topleft =(rmargin -img_rect.width, y)
+        DISPLAYSURF.blit(img_gn_surf, img_rect)
+        y =y +img_rect.height + lnmargin
+
+    pygame.display.flip()
+        
+    pygame.time.wait(1500)
+
+    tl =7
+    def_col=WHITE
+    flash_msg =False
+    pauselock =False    # remove the lock so the user can exit the pause period.
+    fntsize =20
+    strmsg ="Press any key"
+    pause_msg(tl, strmsg, def_col, flash_msg, pauselock, fntsize)
+        
+    cls()
+    
+# hstable_paint() -----------------------------------------------------------
 
 
     
@@ -845,7 +971,7 @@ def cards_hide():
     pygame.display.flip()
 # cards_hide() --------------------------------------------------------------
 
-
+ 
 
 # ---------------------------------------------------------------------------
 # Summary:
@@ -864,6 +990,8 @@ def play_title_screen():
     img_rect =img_gn_surf.get_rect()
     img_rect.center = (HALF_WINWIDTH, HALF_WINHEIGHT)
     DISPLAYSURF.blit(img_gn_surf, img_rect)
+
+    events =pygame.event.get() # clear kbd and mouse buffer.
     
     ui_ok =False
     
@@ -966,9 +1094,10 @@ def pause_msg(tl, strmsg, def_col=GREEN, flash_msg =False, pauselock =True, fnts
 
     global fnt_title
     
-    to =time.time() # start the timer
-    tr =1
-    skip_pause =False
+    to =time.time()         # start the timer
+    tr =1                   # time remaining
+    tr_prev =0              # time remaining last time we checked.
+    skip_pause =False       # True = the user can end the pause prematurely
     retval = False
     
     fnt_title = pygame.font.Font('freesansbold.ttf', fntsize)
@@ -987,9 +1116,25 @@ def pause_msg(tl, strmsg, def_col=GREEN, flash_msg =False, pauselock =True, fnts
         x =0
         pygame.draw.rect(DISPLAYSURF, BLACK, (x, y, 550, img_rect.height))
         # ._
-        
-        tr =tl -(time.time() -to) # calcualate the remaining time.
 
+        
+        tr =tl -(time.time() -to)   # calcualate the remaining time.
+
+        # lets limit the checks to the buffer to 1 every second.
+        if not tr_prev ==tr :
+            # check to see if the user hit the [ESC] key to quit the game.
+            for event in pygame.event.get():
+                if event.type == QUIT:
+                    # the user tried to close the window.
+                    pygame.quit()
+                    sys.exit()
+                elif event.type == KEYDOWN:
+                    if event.key == K_ESCAPE:
+                        pygame.quit()
+                        sys.exit()
+            
+        tr_prev =tr
+        
         if tr >0: # there is still time left on the clock.
             # display the pause message.
             if flash_msg ==True:
@@ -1157,15 +1302,15 @@ def stage_play():
     global snd_send_ok, snd_send_fail, click_sound
     
     end_stage =False
-    #tl =card_total *3          # set the time limit for this stage.
     tl =int(card_total *1.2)    # set the time limit for this stage.
     to =time.time()             # set the timer to start from now.
     tr =16
     ltsp =0
 
+    events =pygame.event.get() # clear kbd and mouse buffer.
+    
     while end_stage ==False:
         #check for player input.
-
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.quit()
@@ -1240,13 +1385,6 @@ def stage_play():
 
                 bonus_points =score_addtime_calc(tr) # add bonus points.
                 
-                #tl =2
-                #strmsg ="Time Bonus = " +str(bonus_points) +" points"
-                #def_col=WHITE
-                #flash_msg =False
-                #pauselock =True
-                #pause_msg(tl, strmsg, def_col, flash_msg, pauselock, pyeild =True)
-
                 score_addtime(tr)
 
                     
@@ -1257,7 +1395,6 @@ def stage_play():
                 pauselock =True
                 pause_msg(tl, strmsg, def_col, flash_msg, pauselock)
    
-                #bonus_points =score_addtime(tr) # add bonus points.
                 retval =True
                 
             elif tr <0:
@@ -1349,7 +1486,7 @@ def stage_end(nextstage =False):
     
     fnt_title = pygame.font.Font('freesansbold.ttf', 30)
     timer_hide()        # remove the timer from view.
-    psp_level_hide()        # remove the level indicator from view.
+    psp_level_hide()    # remove the level indicator from view.
 
     cards_turn()        # place all the cards face down.
     cls()               # clear the screen.
@@ -1403,135 +1540,6 @@ def wr_say(voice):
 
 # ---------------------------------------------------------------------------
 # Summary:
-#   This rountine inserts a new high score into the hi-score table.
-# ---------------------------------------------------------------------------
-def hstable_insert(n_name, n_score):
-    fnd =False
-    ip =False       # insertion pointer
-
-    # search the hst for a place to insert the new rec. 
-    for ip in range(len(hst) +1): 
-        c_name, c_score =hst[ip]
-        if n_score > c_score: # we've found the insertion point.
-            fnd =True
-            break
-
-    if fnd ==True: # an insertion point was found.
-        hst.insert(ip, (n_name, n_score))   # insert the new high score record.
-        hst.pop()                           # delete the last hs record from the list.
-
-# hstable_insert(~) ---------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This rountine looks at the hi-score table and searches for the lowest
-#   score, and returns it to the calling routine.
-# ---------------------------------------------------------------------------
-def hstable_min_get():
-    lscore =-1
-    for pname, pscore in hst:
-        if pscore <lscore or lscore ==-1: # we've found a new high.
-            lscore =pscore
-
-    # return the lowest score.
-    return lscore
-# hstable_min_get() ---------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This rountine saves the hi-score table.
-# ---------------------------------------------------------------------------
-def hstable_save():
-    file_a =open("hiscore.txt", mode="w", encoding="utf-8")
-    for pname, pscore in hst:
-        # write the rec to file with padded spaces so we can read
-        # it back easier.
-        file_a.write("{0:40}".format(pname))
-        file_a.write("{0:10}".format(str(pscore)))
-    file_a.close()
-# hstable_save() ------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This rountine loads the hi-score table.
-# ---------------------------------------------------------------------------
-def hstable_load():
-    global hst
-    
-    #debug_hst(hst)
-    try:
-        file_a =open("hiscore.txt", encoding="utf-8")
-    except:
-        # file can't be loaded. Skip it.
-        return False
-    
-    hst =[] # reset/clear the variable for the hs table.
-
-    # reload the hs table from the existing file.
-    for cntr in range(5):
-        pname =file_a.read(40)          # load the player's name.
-        pscore =int(file_a.read(10))    # load the score for that player.
-
-        hst.append([pname, pscore])     # update hst with new record.
-    file_a.close()
-    #debug_hst(hst)
-
-    return True
-# hstable_load() ------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This rountine paints the hi-score table.
-# ---------------------------------------------------------------------------
-def hstable_paint():
-    lnmargin =3
-    rmargin =550
-    
-    y =40
-    
-    # write all the status msg's to the screen...
-    for l in range(len(hst)):
-        # render the end of stage message.
-        pname, pscore =hst[l]
-        img_gn_surf = fnt_title.render(pname, True, BLUE)
-        img_rect =img_gn_surf.get_rect()
-        img_rect.topleft = (50, y)
-        DISPLAYSURF.blit(img_gn_surf, img_rect)
-
-        img_gn_surf = fnt_title.render(str(pscore), True, BLUE)
-        img_rect =img_gn_surf.get_rect()
-        img_rect.topleft =(rmargin -img_rect.width, y)
-        DISPLAYSURF.blit(img_gn_surf, img_rect)
-        y =y +img_rect.height + lnmargin
-
-    pygame.display.flip()
-        
-    pygame.time.wait(1500)
-
-    tl =7
-    def_col=WHITE
-    flash_msg =False
-    pauselock =False    # remove the lock so the user can exit the pause period.
-    fntsize =20
-    strmsg ="Press any key"
-    pause_msg(tl, strmsg, def_col, flash_msg, pauselock, fntsize)
-        
-    cls()
-    
-# hstable_paint() -----------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
 #   This lets the user type in there name and press enter.
 # ---------------------------------------------------------------------------
 def playername_get():
@@ -1573,6 +1581,8 @@ def playername_get():
     
     
     pygame.display.flip()
+
+    events =pygame.event.get() # clear kbd and mouse buffer.
     
     while plyri !=K_ENTER:
         nc =False
@@ -1930,44 +1940,44 @@ print("Player scored ", score)
 
 
 
-# ---------------------------------------------------------------------------
-# move the card around the screen
-while True: # the main game loop
-    DISPLAYSURF.fill(BLACK)
-    
-    if direction == 'right':
-        catx += 5
-        if catx == 280:
-            direction = 'down'
-    elif direction == 'down':
-        caty += 5
-        if caty == 220:
-            direction = 'left'
-    elif direction == 'left':
-        catx -= 5
-        if catx == 10:
-            direction = 'up'
-    elif direction == 'up':
-        caty -= 5
-        if caty == 10:
-            direction = 'right'
-            
-
-    
-    # paint a card image to the graphics buffer.
-    DISPLAYSURF.blit(cardimages[ 3 ], (catx, caty))
-    
-    # scan input devices to check for user input.
-    for event in pygame.event.get():
-        if event.type == QUIT:
-            # a close request on the window was made.
-            pygame.quit()
-            sys.exit()
-        elif event.type == KEYDOWN:
-            if event.key == K_ESCAPE:
-                pygame.quit()
-                sys.exit()
-            
-    #pygame.display.update()
-    pygame.display.flip()
-    fpsClock.tick(FPS)
+### ---------------------------------------------------------------------------
+### move the card around the screen
+##while True: # the main game loop
+##    DISPLAYSURF.fill(BLACK)
+##    
+##    if direction == 'right':
+##        catx += 5
+##        if catx == 280:
+##            direction = 'down'
+##    elif direction == 'down':
+##        caty += 5
+##        if caty == 220:
+##            direction = 'left'
+##    elif direction == 'left':
+##        catx -= 5
+##        if catx == 10:
+##            direction = 'up'
+##    elif direction == 'up':
+##        caty -= 5
+##        if caty == 10:
+##            direction = 'right'
+##            
+##
+##    
+##    # paint a card image to the graphics buffer.
+##    DISPLAYSURF.blit(cardimages[ 3 ], (catx, caty))
+##    
+##    # scan input devices to check for user input.
+##    for event in pygame.event.get():
+##        if event.type == QUIT:
+##            # a close request on the window was made.
+##            pygame.quit()
+##            sys.exit()
+##        elif event.type == KEYDOWN:
+##            if event.key == K_ESCAPE:
+##                pygame.quit()
+##                sys.exit()
+##            
+##    #pygame.display.update()
+##    pygame.display.flip()
+##    fpsClock.tick(FPS)
