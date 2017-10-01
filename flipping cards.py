@@ -1,14 +1,35 @@
+# -------------------------------------------------------------------------
+# NOTES:
+#   Pygame comes with a builtin default font.
+#
+#   This can always be accessed by passing None as the font name.
+# -------------------------------------------------------------------------
+
+# -------------------------------------------------------------------------
+# Thanks to:
+#   python forum
+#       snippsat
+#           RE: using [isinstance] instead of [type].
+#
+# -------------------------------------------------------------------------
+
 # VERSION INFORMATION
 # -------------------------------------------------------------------------
 # Version 0.21:
 #   [1].    Fixed timing issue with playing sound, reduced the number of
-#           channels from 8 to 2
-#
+#           channels from 8 to 2#
+
 #   [2].    Added a wrapper routine for the espeak library.
 #
 #   [3].    Added exception handling when importing libraries.
 #
 #   [4].    Moved the card image files into the Images dir.
+#
+#   [5].    Update code to cleared the keyboard buffer.
+#
+#   [6].    Improved parameter checking
+#
+#   [7].    Added a background.
 # -------------------------------------------------------------------------
 # Version 0-20:
 #   [1].    Updated the players status bar to incllude the round as well
@@ -124,6 +145,11 @@ try:
 except:
     myerrors.append("Error importing library: espeak.")
 
+try:
+    import os
+except:
+    myerrors.append("Error importing library: sys.")
+
 if len(myerrors) >0: # there were errors.
     print("WARNING!")
     if fatal_err ==False:
@@ -148,14 +174,15 @@ if len(myerrors) >0: # there were errors.
 #pygame.mixer.pre_init(4410, -16, 8, 2048)
 
 try:
-    pygame.mixer.pre_init(44100, -16, 2, 2048) # increase buffer size from 1024 default - might fix probs with crackling sound?
+    #pygame.mixer.pre_init(44100, -16, 2, 2048) # increase buffer size from 1024 default - might fix probs with crackling sound?
+    pygame.mixer.pre_init(44100, -16, 2, 1024) 
     pygame.init()
 except:
     myerrors.append("Error initialising the pygame library.")
 
 
-
-FPS = 30 # frames per second setting
+#FPS = 30 # frames per second setting
+FPS = 3 # frames per second setting
 
 WINWIDTH = 640 # width of the program's window, in pixels
 WINHEIGHT = 480 # height in pixels
@@ -252,20 +279,41 @@ cardimages = []
 ##cardimages.append( pygame.image.load('card - face11.png'))
 ##cardimages.append( pygame.image.load('card - face12.png'))
 
-cardimages.append( pygame.image.load("Images/card - back.png"))
-cardimages.append( pygame.image.load('Images/card - face01.png'))
-cardimages.append( pygame.image.load('Images/card - face02.png'))
-cardimages.append( pygame.image.load('Images/card - face03.png'))
-cardimages.append( pygame.image.load('Images/card - face04.png'))
-cardimages.append( pygame.image.load('Images/card - face05.png'))
-cardimages.append( pygame.image.load('Images/card - face06.png'))
-cardimages.append( pygame.image.load('Images/card - face07.png'))
-cardimages.append( pygame.image.load('Images/card - face08.png'))
-cardimages.append( pygame.image.load('Images/card - face09.png'))
-cardimages.append( pygame.image.load('Images/card - face10.png'))
-cardimages.append( pygame.image.load('Images/card - face11.png'))
-cardimages.append( pygame.image.load('Images/card - face12.png'))
+##cardimages.append( pygame.image.load("Images/card - back.png"))
+##cardimages.append( pygame.image.load('Images/card - face01.png'))
+##cardimages.append( pygame.image.load('Images/card - face02.png'))
+##cardimages.append( pygame.image.load('Images/card - face03.png'))
+##cardimages.append( pygame.image.load('Images/card - face04.png'))
+##cardimages.append( pygame.image.load('Images/card - face05.png'))
+##cardimages.append( pygame.image.load('Images/card - face06.png'))
+##cardimages.append( pygame.image.load('Images/card - face07.png'))
+##cardimages.append( pygame.image.load('Images/card - face08.png'))
+##cardimages.append( pygame.image.load('Images/card - face09.png'))
+##cardimages.append( pygame.image.load('Images/card - face10.png'))
+##cardimages.append( pygame.image.load('Images/card - face11.png'))
+##cardimages.append( pygame.image.load('Images/card - face12.png'))
+
+cardimages.append( pygame.image.load("Images/card - back.png").convert())
+cardimages.append( pygame.image.load('Images/card - face01.png').convert())
+cardimages.append( pygame.image.load('Images/card - face02.png').convert())
+cardimages.append( pygame.image.load('Images/card - face03.png').convert())
+cardimages.append( pygame.image.load('Images/card - face04.png').convert())
+cardimages.append( pygame.image.load('Images/card - face05.png').convert())
+cardimages.append( pygame.image.load('Images/card - face06.png').convert())
+cardimages.append( pygame.image.load('Images/card - face07.png').convert())
+cardimages.append( pygame.image.load('Images/card - face08.png').convert())
+cardimages.append( pygame.image.load('Images/card - face09.png').convert())
+cardimages.append( pygame.image.load('Images/card - face10.png').convert())
+cardimages.append( pygame.image.load('Images/card - face11.png').convert())
+cardimages.append( pygame.image.load('Images/card - face12.png').convert())
+
+img_bkgnd_main =pygame.image.load('Images/sunset.png').convert()
+
+#cardimages.append(pygame.image.load(os.path.join('Images', 'face12.png')).convert())
+#img = pygame.image.load(os.path.join('C:/Users/Gebruiker/Desktop/Renders', 'Render.png')).convert()
 # _.  
+
+
 
 
 
@@ -285,10 +333,10 @@ for card_cntr in range(1, len(cardimages)):
 
 
 
-# write a message to the screen (and center it) ...
-winSurf2 = BASICFONT.render('(Press "r" to restart.)', True, WHITE)
-winRect2 = winSurf2.get_rect()
-winRect2.center = (HALF_WINWIDTH, HALF_WINHEIGHT + 30)
+### write a message to the screen (and center it) ...
+##winSurf2 = BASICFONT.render('(Press "r" to restart.)', True, WHITE)
+##winRect2 = winSurf2.get_rect()
+##winRect2.center = (HALF_WINWIDTH, HALF_WINHEIGHT + 30)
 
 
 
@@ -432,11 +480,14 @@ def cards_turn(ls =False, ip=False, tup =False):
 
     tstatus =False
     
-    if "int" in str(type(ip)):
+    #if "int" in str(type(ip)):
+    if isinstance(ip, int):
         secs = ip *1000
-    elif "float" in str(type(ip)):
+    #elif "float" in str(type(ip)):
+    elif isinstance(ip, float):
         secs = int(ip *1000)
-    elif "bool" in str(type(ip)):
+    #elif "bool" in str(type(ip)):
+    elif isinstance(ip, bool):
         secs =0
     else:
         # Error, an invalid parameter was passed.
@@ -704,7 +755,7 @@ def cards_paint_active_cards():
 
             # paste the image to the image buffer.
             DISPLAYSURF.blit(img_ref, (crd.x, crd.y))
-            pygame.display.update()
+            #pygame.display.update()
 # cards_paint_active_cards(~) -----------------------------------------------
 
 
@@ -886,7 +937,7 @@ def score_addtime(tr):
         pauselock =True
         pause_msg(tl, strmsg, def_col, flash_msg, pauselock, pyield =True)
 
-        pygame.display.flip()
+        #pygame.display.flip()
          
     return time_bonus
 # score_addtime(~)---------------------------------------------------------------------------
@@ -968,7 +1019,7 @@ def cards_hide():
             pygame.draw.rect(DISPLAYSURF, BLACK, (crd.x, crd.y, crd.width, crd.height))
 
     # update screen with changes.
-    pygame.display.flip()
+    #pygame.display.flip()
 # cards_hide() --------------------------------------------------------------
 
  
@@ -1236,7 +1287,11 @@ def stage_start():
     global click_sound, snd_send_ok, snd_send_fail, snd_cards_new
       
     cardsinplay =glevel +3 # calculate the number of cards to use.
-    
+
+    img_rect =img_bkgnd_main.get_rect()
+    img_rect.topleft =0, 0
+    DISPLAYSURF.blit(img_bkgnd_main, img_rect)
+        
     score_paint()
     psp_level_paint()
     psp_round_paint()
@@ -1305,11 +1360,16 @@ def stage_play():
     tl =int(card_total *1.2)    # set the time limit for this stage.
     to =time.time()             # set the timer to start from now.
     tr =16
-    ltsp =0
+    ltsp =0                     # last time sound was played
+    
 
     events =pygame.event.get() # clear kbd and mouse buffer.
-    
+
+    img_rect =img_bkgnd_main.get_rect()
+    img_rect.topleft =0, 0
     while end_stage ==False:
+        #DISPLAYSURF.blit(img_bkgnd_main, img_rect)
+    
         #check for player input.
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -1386,8 +1446,7 @@ def stage_play():
                 bonus_points =score_addtime_calc(tr) # add bonus points.
                 
                 score_addtime(tr)
-
-                    
+                                    
                 tl =2
                 strmsg ="You win"
                 def_col=GREEN
@@ -1464,6 +1523,11 @@ def stage_play():
             retval =False
         
         pygame.display.update()
+
+        # prepare the screen buffer with a fresh coat of the background image.
+        DISPLAYSURF.blit(img_bkgnd_main, img_rect)
+        cards_paint_active_cards()
+        score_paint()
         fpsClock.tick(FPS)
 
     return retval
@@ -1510,7 +1574,8 @@ def stage_end(nextstage =False):
 def wr_say(voice):
     global wr_say_ife
     
-    if not "str" in str(type(voice)):
+    #if not "str" in str(type(voice)):
+    if not isinstance(voice, str):
         # I don't think we can work with anything other than strings,
         # so lets exit this routine.
         return false
