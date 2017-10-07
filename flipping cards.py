@@ -94,8 +94,12 @@
 #import random, pygame, sys, time
 
 fatal_err =False
-wr_say_ife =False   # used by the wr_say routine.
-myerrors =[]
+
+# > ife (ignore further errors) flag(s)
+ife_wr_say =False   # used by the wr_say routine .
+# .
+
+myerrors =[] # create a list object to hold errors that I encounter.
 
 
 try:
@@ -176,11 +180,6 @@ if len(myerrors) >0: # there were errors.
     print("")
     
           
-    
-
-#pygame.mixer.pre_init(4410, -16, 8, 2048)
-#pygame.init()
-#pygame.mixer.pre_init(4410, -16, 8, 2048)
 
 try:
     #pygame.mixer.pre_init(44100, -16, 2, 2048) # increase buffer size from 1024 default - might fix probs with crackling sound?
@@ -190,8 +189,8 @@ except:
     myerrors.append("Error initialising the pygame library.")
 
 
-#FPS = 30 # frames per second setting
-FPS = 3 # frames per second setting
+FPS = 30 # frames per second setting
+#FPS = 3 # frames per second setting
 
 WINWIDTH = 640 # width of the program's window, in pixels
 WINHEIGHT = 480 # height in pixels
@@ -272,13 +271,6 @@ class stype_deck():
     
 
     
-# define a structure to help deal with the cph var.
-def stype_cph():
-    x =0
-    y =0
-    status =0
-    
-
 
 # load the card images as frames ...
 cardimages = []
@@ -324,23 +316,23 @@ cardimages = []
 ##cardimages.append(pygame.image.load('Images/card - face11.png').convert())
 ##cardimages.append(pygame.image.load('Images/card - face12.png').convert())
 
-# include the use of the os library to load our card images to lower the risk of
-# problems occurring while running on other platforms.
-cardimages.append(pygame.image.load(os.path.join("Images", "card - back.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face01.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face02.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face03.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face04.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face05.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face06.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face07.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face08.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face09.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face10.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face11.png")).convert())
-cardimages.append(pygame.image.load(os.path.join("Images", "card - face12.png")).convert())
-
-img_bkgnd_main =pygame.image.load(os.path.join("Images", "sunset.png")).convert()
+### utilise the os library to load our card images to lower the risk of
+### problems occurring while running on other platforms.
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - back.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face01.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face02.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face03.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face04.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face05.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face06.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face07.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face08.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face09.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face10.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face11.png")).convert())
+##cardimages.append(pygame.image.load(os.path.join("Images", "card - face12.png")).convert())
+##
+##img_bkgnd_main =pygame.image.load(os.path.join("Images", "sunset.png")).convert()
 
 #sfx['explosion_1'] = pygame.mixer.Sound(os.path.join(header.paths['sounds'],"smallexp.wav"))
 
@@ -351,20 +343,20 @@ img_bkgnd_main =pygame.image.load(os.path.join("Images", "sunset.png")).convert(
 
 
 
-
-
-# prepare x number of cards for the deck
-for card_cntr in range(1, len(cardimages)):
-    crd = stype_deck()                      # create a new card object
-    crd.num =card_cntr                      # set the face value of the card.
-    crd.img_bk = cardimages[IMG_CARD_BACK]  
-    crd.img_face = cardimages[card_cntr]
-    crd.img_ref =crd.img_bk
-    crd.status = False
-    cards.append(crd)                       # add the card to the collection.
-    del crd
-# _. 
-
+##
+##
+### prepare x number of cards for the deck
+##for card_cntr in range(1, len(cardimages)):
+##    crd = stype_deck()                      # create a new card object
+##    crd.num =card_cntr                      # set the face value of the card.
+##    crd.img_bk = cardimages[IMG_CARD_BACK]  
+##    crd.img_face = cardimages[card_cntr]
+##    crd.img_ref =crd.img_bk
+##    crd.status = False
+##    cards.append(crd)                       # add the card to the collection.
+##    del crd
+### _. 
+##
 
 
 
@@ -376,6 +368,17 @@ for card_cntr in range(1, len(cardimages)):
 
 
 
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This routine clears the screen.
+# ---------------------------------------------------------------------------
+def cls():
+     # clear the screen.
+    pygame.draw.rect(DISPLAYSURF, BLACK, (0, 0, WINWIDTH, WINHEIGHT))
+# cls() ---------------------------------------------------------------------
 
 
 
@@ -486,13 +489,50 @@ def deck_build(num_of_cards =3):
         # the calling routine is trying build a deck of cards
         # with no cards
         num_of_cards =1
-        
+
+##    print()
+##    print("ROUTINE: deck_build()")
+##    print("\t var num_of_cards =", num_of_cards)
+##    print()
+    
     # put the cards into a deck        
     for card_cntr in range(0, num_of_cards, 1):
         # add the current card to the deck.
         crd =cards[card_cntr]
         deck.append(cards[card_cntr])
 # deck_build(~) -------------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This routine removes the cards from view.
+# ---------------------------------------------------------------------------
+def cards_hide():
+##C_CPH_X
+##C_CPH_Y
+##C_CPH_STATUS
+##C_CPH_CRD
+
+    # search for any cards that have been placed in one of our slots.
+    for cntr in range(len(arr_card_place_holders), 0, -1):
+        cph =arr_card_place_holders[cntr -1]
+        # access the card's properties and update it so that it
+        # indicates that the card should be drawn face down.
+        
+        if cph[C_CPH_CRD] is not None:
+            # the list element is being used (presumably being a card obj.
+
+            # attempt to reference the card obj.
+            crd =cph[C_CPH_CRD] 
+                        
+            # erase the image of the card.
+            #DISPLAYSURF.blit(img_ref, (crd.x, crd.y))
+            pygame.draw.rect(DISPLAYSURF, BLACK, (crd.x, crd.y, crd.width, crd.height))
+
+    # update screen with changes.
+    #pygame.display.flip()
+# cards_hide() --------------------------------------------------------------
 
 
 
@@ -798,6 +838,148 @@ def cards_paint_active_cards():
 
 # ---------------------------------------------------------------------------
 # Summary:
+#   Anything that needs to be performed before the level starts should be
+#   placed.
+# ---------------------------------------------------------------------------
+def game_init():
+    global hst
+    global score, gstagecntr, glevel
+    global cardimages, img_bkgnd_main
+    global snd_lbegin, snd_gintro, snd_gend, snd_tmrl, click_sound
+    global snd_send_ok, snd_send_fail, snd_cards_new
+    
+
+    score =0
+    gstagecntr =0   # reset the stage number.
+    glevel =0       # set the level number.
+
+    # create a default hi-score table.
+    hst =[]
+    hst.append(["Stuart Charles", 300])
+    hst.append(["Keano Reeves", 250])
+    hst.append(["Tony Prescot", 200])
+    hst.append(["Fireman Sam", 150])
+    hst.append(["John Travolta", 100])
+    # _.
+
+    # -------------------------------------------------------------------------
+    # utilise the os library to load our card images to lower the risk of
+    # problems occurring while running on other platforms.
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - back.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face01.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face02.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face03.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face04.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face05.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face06.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face07.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face08.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face09.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face10.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face11.png")).convert())
+    cardimages.append(pygame.image.load(os.path.join("Images", "card - face12.png")).convert())
+
+##    print()
+##    print("ROUTINE: game_init()")
+##    print("\t var: cardimages - size=", len(cardimages))
+##    print()
+    
+    img_bkgnd_main =pygame.image.load(os.path.join("Images", "sunset.png")).convert()
+    # -------------------------------------------------------------------------
+    
+    
+    # -------------------------------------------------------------------------
+    # load some sounds ...
+##    snd_lbegin =pygame.mixer.Sound("Sound/game_intro.ogg") # this file <-- ???
+##    snd_tmrl =pygame.mixer.Sound("Sound/TimeLow.ogg")
+##    click_sound = pygame.mixer.Sound("Sound/CardReveal.wav")
+##    snd_send_ok =pygame.mixer.Sound("Sound/stageend_ok.ogg")
+##    snd_send_fail =pygame.mixer.Sound("Sound/stageend_fail.ogg")
+##    snd_gintro =pygame.mixer.Sound("Sound/game_intro.ogg")
+##    snd_gend =pygame.mixer.Sound("Sound/GameOver.ogg")
+##    snd_cards_new =pygame.mixer.Sound("Sound/NewCards.wav")
+
+    snd_lbegin =pygame.mixer.Sound(os.path.join("Sound", "game_intro.ogg")) # this file <-- ???
+    snd_tmrl =pygame.mixer.Sound(os.path.join("Sound", "TimeLow.ogg"))
+    click_sound = pygame.mixer.Sound(os.path.join("Sound", "CardReveal.wav"))
+    snd_send_ok =pygame.mixer.Sound(os.path.join("Sound", "stageend_ok.ogg"))
+    snd_send_fail =pygame.mixer.Sound(os.path.join("Sound", "stageend_fail.ogg"))
+    snd_gintro =pygame.mixer.Sound(os.path.join("Sound", "game_intro.ogg"))
+    snd_gend =pygame.mixer.Sound(os.path.join("Sound", "GameOver.ogg"))
+    snd_cards_new =pygame.mixer.Sound(os.path.join("Sound", "NewCards.wav"))
+
+    
+
+    # prepare x number of cards for the deck
+    for card_cntr in range(1, len(cardimages)):
+        crd = stype_deck()                      # create a new card object
+        crd.num =card_cntr                      # set the face value of the card.
+        crd.img_bk = cardimages[IMG_CARD_BACK]  
+        crd.img_face = cardimages[card_cntr]
+        crd.img_ref =crd.img_bk
+        crd.status = False
+        cards.append(crd)                       # add the card to the collection.
+        del crd
+    # _. 
+
+
+    # -------------------------------------------------------------------------
+
+
+    hstable_load() # load the high score table.
+
+# game_init() ----------------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   Anything that needs to be performed before the game starts should be
+#   placed here.
+# ---------------------------------------------------------------------------
+def game_begin():
+    global snd_gintro
+    global score, gstagecntr, glevel
+    
+    score =0
+    gstagecntr =0   # reset the stage number.
+    glevel =1       # set the level number.
+    
+# game_begin() --------------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   Anything that needs to be performed at the end of a level.
+# ---------------------------------------------------------------------------
+def game_end():
+    global snd_lbegin
+    
+    y =HALF_WINHEIGHT
+    lmargine =10
+    l = 0               # the text line number.
+    
+    snd_gend.play()     # play the sound associated with the end of game.
+    
+    fnt_title = pygame.font.Font('freesansbold.ttf', 40)
+
+    tl =7
+    strmsg ="Game Over"
+    def_col=RED
+    flash_msg =True
+    pauselock =False
+    pause_msg(tl, strmsg, def_col, flash_msg, pauselock)
+        
+    cls()
+
+    hstable_paint() # list the high scores.
+# game_end() -----------------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
 #   This rountine inserts a new high score into the hi-score table.
 # ---------------------------------------------------------------------------
 def hstable_insert(n_name, n_score):
@@ -927,138 +1109,78 @@ def hstable_paint():
     
 # ---------------------------------------------------------------------------
 # Summary:
-#   This routine adds some point to the player's score.
+#   This rountine prepares game for a new level.
 # ---------------------------------------------------------------------------
-def score_addpoints(tpoints =0, addcardval =True):
-    global crdval, score
+def level_ini():
 
-    if addcardval ==True:
-        score +=crdval
-        crdval +=crdval *2
-    else:
-        score +=tpoints
-# score_addpoints(~) ---------------------------------------------------------
+    global snd_lbegin, snd_lend, snd_tmrl
+    
+# level_ini() ---------------------------------------------------------------
 
 
 
 # ---------------------------------------------------------------------------
 # Summary:
-#   This routine adds additional points to the player's score using the
-#   remaining time as a guide.
+#   This routine goes through the process of preparing for a level to
+#   be played.
 # ---------------------------------------------------------------------------
-def score_addtime(tr):
-    bp =score_addtime_calc(tr) # calc the time bonus points.
-    time_bonus =bp
+def level_begin():
+    strmsg ="-- NEW LEVEL --"
+    
+    cls()               # clear the screen.
 
-    if bp  <=0:
-        # player has zero bonus points.
-        return False
+    # skip the new level msg if its still the 1st level.
+    if glevel >1:
+        #espeak.synth("You have completed level {}.".format(glevel -1))
+        wr_say("You have completed level {}.".format(glevel -1))
+        pause_msg(2, strmsg, GREEN, True )
+        #espeak.synth("Now try level {}.".format(glevel))
+        wr_say("Now try level {}.".format(glevel))
+# level_begin() -------------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This routine starts the level.
+# ---------------------------------------------------------------------------
+def level_play():
+    global gstagecntr, glevel, card_total, tsil, card_total, tl
+    global GREEN
+    
+    ss =False           # stage staus.
         
-    tl =2
-    strmsg =str(bp) +" Time Bonus points"
-    def_col=WHITE
-    flash_msg =False
-    pauselock =True
-    pause_msg(tl, strmsg, def_col, flash_msg, pauselock)
     
-    while bp >0: # there are more bonus points to add to the score
-        bp -=1                      # reduce the number of bonus points.
-        score_addpoints(1, False)   # add a single bonus point to the score.
-        score_paint()               # paint the rendered score to the screen.
-
-        tl =2
-        strmsg =str(bp) +" Time Bonus points"
-        def_col=WHITE
-        flash_msg =False
-        pauselock =True
-        pause_msg(tl, strmsg, def_col, flash_msg, pauselock, pyield =True)
-
-        #pygame.display.flip()
-         
-    return time_bonus
-# score_addtime(~)---------------------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This routine works out the number of bonus points to add to the score.
-# ---------------------------------------------------------------------------
-def score_addtime_calc(tr):
-    #global score
-
-    time_bonus =(tr * (5 +glevel))
-    #score +=time_bonus
-
-    return time_bonus
-# score_addtime(~)---------------------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This routine paints the score on the screen.
-# ---------------------------------------------------------------------------
-def score_paint():
-
-    y =0
-    lm =1       # set the line margin.
-    
-    img_surf = fnt_main.render("Score", True, WHITE)
-    img_rect = img_surf.get_rect()
-    img_rect.topleft = (590, 0)
-    DISPLAYSURF.blit(img_surf, img_rect)
-
-    # get ready to paint on the next line.
-    y +=img_rect.height
-    y +=lm
-    
-    # erase the previous displayed number.
-    imgwidth =img_rect.width
-    pygame.draw.rect(DISPLAYSURF, BLACK, (590, y, imgwidth, img_rect.height))
-    
-    img_surf = fnt_main.render(str(score), True, WHITE)
-    img_rect = img_surf.get_rect()
-    #img_rect.center = (610, y)
-    #img_rect.topleft =(img_rect.x, y)
-    img_rect.topright =(635, y)
-    
-    DISPLAYSURF.blit(img_surf, img_rect)
-# score_paint() -------------------------------------------------------------
- 
-
-   
-# ---------------------------------------------------------------------------
-# Summary:
-#   This routine removes the cards from view.
-# ---------------------------------------------------------------------------
-def cards_hide():
-##C_CPH_X
-##C_CPH_Y
-##C_CPH_STATUS
-##C_CPH_CRD
-
-    # search for any cards that have been placed in one of our slots.
-    for cntr in range(len(arr_card_place_holders), 0, -1):
-        cph =arr_card_place_holders[cntr -1]
-        # access the card's properties and update it so that it
-        # indicates that the card should be drawn face down.
+    # run all the stages for this level.
+    for gstagecntr in range(1, tsil +1):
+        stage_ini()    
+        stage_start()       # start the stage.
+        ss =stage_play()
         
-        if cph[C_CPH_CRD] is not None:
-            # the list element is being used (presumably being a card obj.
+        # play the stuff that goes on the end of the stage...
+        if ss ==True: # check the returned stage status.
+            # the stage was completed ok.
+            stage_end(ss) # run the end-stage in a special next-stage mode.
+        else:
+            # player failed to complete the stage successfully.
+            stage_end()         # end the stage.
+            break                # skip the other stages.
 
-            # attempt to reference the card obj.
-            crd =cph[C_CPH_CRD] 
-                        
-            # erase the image of the card.
-            #DISPLAYSURF.blit(img_ref, (crd.x, crd.y))
-            pygame.draw.rect(DISPLAYSURF, BLACK, (crd.x, crd.y, crd.width, crd.height))
+    return ss # stage status
+# level_play() --------------------------------------------------------------
 
-    # update screen with changes.
-    #pygame.display.flip()
-# cards_hide() --------------------------------------------------------------
 
- 
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This rountine runs the things that need to be done when a level ends.
+# ---------------------------------------------------------------------------
+def level_end():
+
+    cls()
+# level_end() ---------------------------------------------------------------
+
+
 
 # ---------------------------------------------------------------------------
 # Summary:
@@ -1115,64 +1237,6 @@ def play_title_screen():
 
 
    
-# ---------------------------------------------------------------------------
-# Summary:
-#   This routine removes the timer image from the screen.
-# ---------------------------------------------------------------------------
-def timer_hide():
-    img_surf = fnt_main.render("Time", True, WHITE)
-    img_rect = img_surf.get_rect()
-
-    pygame.draw.rect(DISPLAYSURF, BLACK, [590, 40, img_rect.width, img_rect.height])
-    pygame.draw.rect(DISPLAYSURF, BLACK, [590, 60, 37, 30])
-# timer_hide() --------------------------------------------------------------
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This routine is used to paint the timer on the screen.
-# ---------------------------------------------------------------------------
-def timer_paint(tl, to, def_col=GREEN, lti =True):
-    tr =tl -int(time.time() -to) # calcualate the remaining time.
-    
-    # erase old images drawn within the area used to draw the timer.
-    if lti ==True:
-        # the low time indicator should be used when the remaining
-        # time falls below a certain level.
-        if tr <3:
-            # make the background flash.
-            if tr % 2 ==0:
-                boc =RED    # block out colour.
-            else:
-                boc =BLACK
-        else:
-            boc =BLACK  # block out colour.
-    else:
-        # set the default background colur to black.
-        boc =BLACK
-
-    pygame.draw.rect(DISPLAYSURF, boc, [590, 70, 37, 30])
-
-    # render a new image of remaining time.
-    img_surf = fnt_main.render("Time", True, WHITE)
-    img_rect = img_surf.get_rect()
-    img_rect.topleft = (590, 50)
-    DISPLAYSURF.blit(img_surf, img_rect)
-    
-    #tmr_str =str(tl -int(to -time.time()))
-    tmr_str =str(tr)
-    if tr >=0:
-        img_surf = fnt_main.render(tmr_str, True, def_col)
-        img_rect = img_surf.get_rect()
-        img_rect.center = (610, 80)
-        DISPLAYSURF.blit(img_surf, img_rect)
-
-    
-    return tr # return the remaining time.
-# timer_paint(~) ------------------------------------------------------------
-
-
-
 # ---------------------------------------------------------------------------
 # Summary:
 #   This routine is used to paint the timer on the screen.
@@ -1329,7 +1393,7 @@ def stage_start():
     img_rect.topleft =0, 0
     DISPLAYSURF.blit(img_bkgnd_main, img_rect)
         
-    score_paint()
+    psp_score_paint()
     psp_level_paint()
     psp_round_paint()
     deck_build(cardsinplay)
@@ -1405,8 +1469,6 @@ def stage_play():
     img_rect =img_bkgnd_main.get_rect()
     img_rect.topleft =0, 0
     while end_stage ==False:
-        #DISPLAYSURF.blit(img_bkgnd_main, img_rect)
-    
         #check for player input.
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -1442,32 +1504,30 @@ def stage_play():
                                 # check if the card has already been turned over.
                                 if card_is_faceup(crd) ==False:
                                     # the card hasn't been turned over.
-                                    #click_sound.play()
-                                    
                                     # update the crd object so that its face up.
                                     card_turn_faceup(crd)
                                     cards_paint_active_cards()
-                                    score_paint()
+                                    psp_score_paint()
                                     card_cursor_animate(crd)
                                     
                                     # check if the correct card was turned over.
                                     if crd.num == card_next:
                                         # the player turned the correct card over.
-                                        score_addpoints()
+                                        psp_score_addpoints()
                                     else:
                                         # the player turned over the wrong card.
-                                        timer_hide()
+                                        #psp_timer_hide()
                                         retval =False
                                         end_stage =True
                                         break
                                         
-                                    score_paint()
+                                    psp_score_paint()
                                     
                                     # calc the value of the next card.
                                     card_next +=1 
 
 
-        tr =timer_paint(tl, to)
+        tr =psp_timer_paint(tl, to)
         #psp_level_paint()
         if end_stage !=True:
             # the game hasn't ended due to an incorrect answer.
@@ -1480,9 +1540,9 @@ def stage_play():
                 #espeak.synth("Well done")
                 wr_say("Well done")
 
-                bonus_points =score_addtime_calc(tr) # add bonus points.
+                bonus_points =psp_score_addtime_calc(tr) # add bonus points.
                 
-                score_addtime(tr)
+                psp_score_addtime(tr)
                                     
                 tl =2
                 strmsg ="You win"
@@ -1564,7 +1624,7 @@ def stage_play():
         # prepare the screen buffer with a fresh coat of the background image.
         DISPLAYSURF.blit(img_bkgnd_main, img_rect)
         cards_paint_active_cards()
-        score_paint()
+        psp_score_paint()
         fpsClock.tick(FPS)
 
     return retval
@@ -1586,7 +1646,7 @@ def stage_end(nextstage =False):
     l = 0               # the text line number.
     
     fnt_title = pygame.font.Font('freesansbold.ttf', 30)
-    timer_hide()        # remove the timer from view.
+    psp_timer_hide()    # remove the timer from view.
     psp_level_hide()    # remove the level indicator from view.
 
     cards_turn()        # place all the cards face down.
@@ -1597,51 +1657,7 @@ def stage_end(nextstage =False):
 
 
 # ---------------------------------------------------------------------------
-# Description:
-#   I am a little unsure of how to resolve the issue that not all computers
-#   will have access to the espeak library, so I built this routine in an
-#   attempt to trap the error of not having the library available, but still
-#   permitting it to run the game without having to comment out all the
-#   statements by hand.
-#
-# Summary:
-#   I designed this wrapper routine to make it easier to trap errors when
-#   working with the speach synth from "espeak".
-# ---------------------------------------------------------------------------
-def wr_say(voice):
-    global wr_say_ife
-    
-    #if not "str" in str(type(voice)):
-    if not isinstance(voice, str):
-        # I don't think we can work with anything other than strings,
-        # so lets exit this routine.
-        return false
-        
-    try:
-        espeak.synth(voice)
-        return True
-    except:
-        # something went wrong when trying to calling the a routine in
-        # espeak.
-        if wr_say_ife ==False:
-            # this is the 1st instance of the msg being displayed.
-            print("")
-            print("*********************************************************")
-            print("                     WARNING")
-            print(" Something went wrong when trying to calling a routine")
-            print(" from the espeak library.")
-            print("")
-            print(" Its not fatal but it probably means you won't hear any")
-            print(" comands/prompts from the computer voice.")
-            print(" ********************************************************")
-            wr_say_ife =True # ignore further errors.
-            
-# wr_say( ~ ) ---------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
+# Discription:
 #   This lets the user type in there name and press enter.
 # ---------------------------------------------------------------------------
 def playername_get():
@@ -1734,6 +1750,19 @@ def playername_get():
 
 
 # ---------------------------------------------------------------------------
+# Description:
+#   Paints the player status panel used to display the status of the player.
+# ---------------------------------------------------------------------------
+def psp_paint():
+    psp_score_paint()
+    psp_timer_paint()
+    psp_level_paint()
+    psp_level_paint()
+# panel_ply_status() --------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
 # Summary:
 #   This routine is used remove the image of the level from the screen.
 # ---------------------------------------------------------------------------
@@ -1801,181 +1830,224 @@ def psp_round_paint():
 
 # ---------------------------------------------------------------------------
 # Summary:
-#   This rountine prepares game for a new level.
+#   This routine adds some point to the player's score.
 # ---------------------------------------------------------------------------
-def level_ini():
+def psp_score_addpoints(tpoints =0, addcardval =True):
+    global crdval, score
 
-    global snd_lbegin, snd_lend, snd_tmrl
-    
-# level_ini() ---------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This routine goes through the process of preparing for a level to
-#   be played.
-# ---------------------------------------------------------------------------
-def level_begin():
-    strmsg ="-- NEW LEVEL --"
-    
-    cls()               # clear the screen.
-
-    # skip the new level msg if its still the 1st level.
-    if glevel >1:
-        #espeak.synth("You have completed level {}.".format(glevel -1))
-        wr_say("You have completed level {}.".format(glevel -1))
-        pause_msg(2, strmsg, GREEN, True )
-        #espeak.synth("Now try level {}.".format(glevel))
-        wr_say("Now try level {}.".format(glevel))
-# level_begin() -------------------------------------------------------------
+    if addcardval ==True:
+        score +=crdval
+        crdval +=crdval *2
+    else:
+        score +=tpoints
+# psp_score_addpoints(~) ---------------------------------------------------------
 
 
 
 # ---------------------------------------------------------------------------
 # Summary:
-#   This routine starts the level.
+#   This routine adds additional points to the player's score using the
+#   remaining time as a guide.
 # ---------------------------------------------------------------------------
-def level_play():
-    global gstagecntr, glevel, card_total, tsil, card_total, tl
-    global GREEN
-    
-    ss =False           # stage staus.
+def psp_score_addtime(tr):
+    bp =psp_score_addtime_calc(tr) # calc the time bonus points.
+    time_bonus =bp
+
+    if bp  <=0:
+        # player has zero bonus points.
+        return False
         
-    
-    # run all the stages for this level.
-    for gstagecntr in range(1, tsil +1):
-        stage_ini()    
-        stage_start()       # start the stage.
-        ss =stage_play()
-        
-        # play the stuff that goes on the end of the stage...
-        if ss ==True: # check the returned stage status.
-            # the stage was completed ok.
-            stage_end(ss) # run the end-stage in a special next-stage mode.
-        else:
-            # player failed to complete the stage successfully.
-            stage_end()         # end the stage.
-            break                # skip the other stages.
-
-    return ss # stage status
-# level_play() --------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This rountine runs the things that need to be done when a level ends.
-# ---------------------------------------------------------------------------
-def level_end():
-
-    cls()
-# level_end() ---------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   This routine clears the screen.
-# ---------------------------------------------------------------------------
-def cls():
-     # clear the screen.
-    pygame.draw.rect(DISPLAYSURF, BLACK, (0, 0, WINWIDTH, WINHEIGHT))
-# cls() ---------------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   Anything that needs to be performed before the level starts should be
-#   placed.
-# ---------------------------------------------------------------------------
-def game_init():
-    global hst
-    global score, gstagecntr, glevel
-    global snd_lbegin, snd_gintro, snd_gend, snd_tmrl, click_sound
-    global snd_send_ok, snd_send_fail, snd_cards_new
-    
-
-    score =0
-    gstagecntr =0   # reset the stage number.
-    glevel =0       # set the level number.
-
-    # create a default hi-score table.
-    hst =[]
-    hst.append(["Stuart Charles", 300])
-    hst.append(["Keano Reeves", 250])
-    hst.append(["Tony Prescot", 200])
-    hst.append(["Fireman Sam", 150])
-    hst.append(["John Travolta", 100])
-    # _.
-    
-    # -------------------------------------------------------------------------
-    # load some sounds ...
-    snd_lbegin =pygame.mixer.Sound("Sound/game_intro.ogg") # this file <-- ???
-    snd_tmrl =pygame.mixer.Sound("Sound/TimeLow.ogg")
-    click_sound = pygame.mixer.Sound("Sound/CardReveal.wav")
-    snd_send_ok =pygame.mixer.Sound("Sound/stageend_ok.ogg")
-    snd_send_fail =pygame.mixer.Sound("Sound/stageend_fail.ogg")
-    snd_gintro =pygame.mixer.Sound("Sound/game_intro.ogg")
-    snd_gend =pygame.mixer.Sound("Sound/GameOver.ogg")
-    snd_cards_new =pygame.mixer.Sound("Sound/NewCards.wav")
-    # -------------------------------------------------------------------------
-
-
-    hstable_load() # load the high score table.
-
-# game_init() ----------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   Anything that needs to be performed before the game starts should be
-#   placed here.
-# ---------------------------------------------------------------------------
-def game_begin():
-    global snd_gintro
-    global score, gstagecntr, glevel
-    
-    score =0
-    gstagecntr =0   # reset the stage number.
-    glevel =1       # set the level number.
-    
-# game_begin() --------------------------------------------------------------
-
-
-
-# ---------------------------------------------------------------------------
-# Summary:
-#   Anything that needs to be performed at the end of a level.
-# ---------------------------------------------------------------------------
-def game_end():
-    global snd_lbegin
-    
-    y =HALF_WINHEIGHT
-    lmargine =10
-    l = 0               # the text line number.
-    
-    snd_gend.play()     # play the sound associated with the end of game.
-    
-    fnt_title = pygame.font.Font('freesansbold.ttf', 40)
-
-    tl =7
-    strmsg ="Game Over"
-    def_col=RED
-    flash_msg =True
-    pauselock =False
+    tl =2
+    strmsg =str(bp) +" Time Bonus points"
+    def_col=WHITE
+    flash_msg =False
+    pauselock =True
     pause_msg(tl, strmsg, def_col, flash_msg, pauselock)
+    
+    while bp >0: # there are more bonus points to add to the score
+        bp -=1                      # reduce the number of bonus points.
+        psp_score_addpoints(1, False)   # add a single bonus point to the score.
+        psp_score_paint()               # paint the rendered score to the screen.
+
+        tl =2
+        strmsg =str(bp) +" Time Bonus points"
+        def_col=WHITE
+        flash_msg =False
+        pauselock =True
+        pause_msg(tl, strmsg, def_col, flash_msg, pauselock, pyield =True)
+
+        #pygame.display.flip()
+         
+    return time_bonus
+# psp_score_addtime(~) ------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This routine works out the number of bonus points to add to the score.
+# ---------------------------------------------------------------------------
+def psp_score_addtime_calc(tr):
+    #global score
+
+    time_bonus =(tr * (5 +glevel))
+    #score +=time_bonus
+
+    return time_bonus
+# psp_score_addtime_calc(~) -------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This routine paints the score on the screen.
+# ---------------------------------------------------------------------------
+def psp_score_paint():
+
+    y =0
+    lm =1       # set the line margin.
+    
+    img_surf = fnt_main.render("Score", True, WHITE)
+    img_rect = img_surf.get_rect()
+    img_rect.topleft = (590, 0)
+    DISPLAYSURF.blit(img_surf, img_rect)
+
+    # get ready to paint on the next line.
+    y +=img_rect.height
+    y +=lm
+    
+    # erase the previous displayed number.
+    imgwidth =img_rect.width
+    pygame.draw.rect(DISPLAYSURF, BLACK, (590, y, imgwidth, img_rect.height))
+    
+    img_surf = fnt_main.render(str(score), True, WHITE)
+    img_rect = img_surf.get_rect()
+    #img_rect.center = (610, y)
+    #img_rect.topleft =(img_rect.x, y)
+    img_rect.topright =(635, y)
+    
+    DISPLAYSURF.blit(img_surf, img_rect)
+# psp_score_paint() -------------------------------------------------------------
+ 
+
+   
+# ---------------------------------------------------------------------------
+# Summary:
+#   This routine removes the timer image from the screen.
+# ---------------------------------------------------------------------------
+def psp_timer_hide():
+    img_surf = fnt_main.render("Time", True, WHITE)
+    img_rect = img_surf.get_rect()
+
+    pygame.draw.rect(DISPLAYSURF, BLACK, [590, 40, img_rect.width, img_rect.height])
+    pygame.draw.rect(DISPLAYSURF, BLACK, [590, 60, 37, 30])
+# psp_timer_hide() --------------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# Summary:
+#   This routine is used to paint the timer on the screen.
+# ---------------------------------------------------------------------------
+def psp_timer_paint(tl, to, def_col=GREEN, lti =True):
+    tr =tl -int(time.time() -to) # calcualate the remaining time.
+    
+    # erase old images drawn within the area used to draw the timer.
+    if lti ==True:
+        # the low time indicator should be used when the remaining
+        # time falls below a certain level.
+        if tr <3:
+            # make the background flash.
+            if tr % 2 ==0:
+                boc =RED    # block out colour.
+            else:
+                boc =BLACK
+        else:
+            boc =BLACK  # block out colour.
+    else:
+        # set the default background colur to black.
+        boc =BLACK
+
+    pygame.draw.rect(DISPLAYSURF, boc, [590, 70, 37, 30])
+
+    # render a new image of remaining time.
+    img_surf = fnt_main.render("Time", True, WHITE)
+    img_rect = img_surf.get_rect()
+    img_rect.topleft = (590, 50)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    
+    #tmr_str =str(tl -int(to -time.time()))
+    tmr_str =str(tr)
+    if tr >=0:
+        img_surf = fnt_main.render(tmr_str, True, def_col)
+        img_rect = img_surf.get_rect()
+        img_rect.center = (610, 80)
+        DISPLAYSURF.blit(img_surf, img_rect)
+
+    
+    return tr # return the remaining time.
+# psp_timer_paint(~) --------------------------------------------------------
+
+
+# ---------------------------------------------------------------------------
+# Description:
+#   define a structure to help deal with the numerous card placement
+#   holders (cph) positions (places on the screen).
+# ---------------------------------------------------------------------------
+def stype_cph():
+    x =0
+    y =0
+    status =0
+# stype_cph() ---------------------------------------------------------------
+    
+
+
+# ---------------------------------------------------------------------------
+# Description:
+#   I am a little unsure of how to resolve the issue that not all computers
+#   will have access to the espeak library, so I built this routine in an
+#   attempt to trap the error of not having the library available, but still
+#   permitting it to run the game without having to comment out all the
+#   statements by hand.
+#
+# Summary:
+#   I designed this wrapper routine to make it easier to trap errors when
+#   working with the speach synth from "espeak".
+# ---------------------------------------------------------------------------
+def wr_say(voice):
+    global ife_wr_say # ife (ignore further error) flag
+    
+    #if not "str" in str(type(voice)):
+    if not isinstance(voice, str):
+        # I don't think we can work with anything other than strings,
+        # so lets exit this routine.
+        return false
         
-    cls()
+    try:
+        espeak.synth(voice)
+        return True
+    except:
+        # something went wrong when trying to calling the a routine in
+        # espeak.
+        if ife_wr_say ==False:
+            # this is the 1st instance of the msg being displayed.
+            print("")
+            print("*********************************************************")
+            print("                     WARNING")
+            print(" Something went wrong when trying to calling a routine")
+            print(" from the espeak library.")
+            print("")
+            print(" Its not fatal but it probably means you won't hear any")
+            print(" comands/prompts from the computer voice.")
+            print(" ********************************************************")
+            ife_wr_say =True # ignore further errors.
+            
+# wr_say( ~ ) ---------------------------------------------------------------
 
-    hstable_paint() # list the high scores.
-# game_end() -----------------------------------------------------------------
 
 
-    
-    
+
+
+
 catx = 10
 caty = 10
 direction = 'right'
