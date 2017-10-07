@@ -1508,7 +1508,8 @@ def stage_play():
                                     # update the crd object so that its face up.
                                     card_turn_faceup(crd)
                                     cards_paint_active_cards()
-                                    psp_score_paint()
+                                    #psp_score_paint()
+                                    psp_paint(tl, to)
                                     card_cursor_animate(crd)
                                     
                                     # check if the correct card was turned over.
@@ -1753,10 +1754,17 @@ def playername_get():
 # ---------------------------------------------------------------------------
 # Description:
 #   Paints the player status panel used to display the status of the player.
+#                                              
+# Parameter(s):
+#   tl          integer
+#       Specifies the desired tl (time limit).
+#
+#   to          integer
+#       When the timer was started.
 # ---------------------------------------------------------------------------
-def psp_paint():
+def psp_paint(tl =0, to =0):
     psp_score_paint()
-    psp_timer_paint()
+    psp_timer_paint(tl, to)
     psp_level_paint()
     psp_level_paint()
 # panel_ply_status() --------------------------------------------------------
