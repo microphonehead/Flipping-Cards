@@ -116,6 +116,10 @@ except:
     
 try:
     import sys
+    # add a folder path to the sys so that files in that directory
+    # are searched/used when importing modules.
+    sys.path.insert(1,'Debug')
+    sys.path.insert(1,'Lib') 
 except:
     myerrors.append("Error importing library: sys.")
 
@@ -136,7 +140,10 @@ if len(myerrors) >0:
     # game can't run without these.
     fatal_err =True
 
-sys.path.insert(1,'code') # add a folder to the sys path search register ([code] ???).
+# add a folder path to the sys so that files in that directory
+# are searched/used when importing modules.
+sys.path.insert(1,'Debug')
+sys.path.insert(1,'Lib') 
 
 try:
     from debugfc import cards_debug_print
