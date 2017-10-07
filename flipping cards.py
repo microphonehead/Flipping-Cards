@@ -1394,6 +1394,7 @@ def stage_start():
     DISPLAYSURF.blit(img_bkgnd_main, img_rect)
         
     psp_score_paint()
+    psp_timer_paint(0, 0) # paint the timer caption.
     psp_level_paint()
     psp_round_paint()
     deck_build(cardsinplay)
@@ -1950,6 +1951,8 @@ def psp_timer_hide():
 # ---------------------------------------------------------------------------
 def psp_timer_paint(tl, to, def_col=GREEN, lti =True):
     tr =tl -int(time.time() -to) # calcualate the remaining time.
+
+    rgb_caption =WHITE  # set the default colour of the timer caption
     
     # erase old images drawn within the area used to draw the timer.
     if lti ==True:
@@ -1958,26 +1961,50 @@ def psp_timer_paint(tl, to, def_col=GREEN, lti =True):
         if tr <3:
             # make the background flash.
             if tr % 2 ==0:
-                boc =RED    # block out colour.
+                #boc =RED    # block out colour.
+                rgb_caption =RED
             else:
-                boc =BLACK
+                #boc =BLACK
+                pass
         else:
-            boc =BLACK  # block out colour.
+            #boc =BLACK  # block out colour.
+            pass
     else:
-        # set the default background colur to black.
-        boc =BLACK
+        ## set the default background colur to black.
+        #boc =BLACK
+        pass
 
-    pygame.draw.rect(DISPLAYSURF, boc, [590, 70, 37, 30])
+    #pygame.draw.rect(DISPLAYSURF, boc, [590, 70, 37, 30])
 
     # render a new image of remaining time.
-    img_surf = fnt_main.render("Time", True, WHITE)
+    #   -   paint a black border where the caption will be
+    #       so the text stands out and can be seen.
+    #
+    #   -   paint the time caption over the blacked out
+    #       border.
+    x,y =590, 50
+    img_surf = fnt_main.render("Time", True, BLACK)
+    img_rect = img_surf.get_rect()
+    img_rect.topleft = (x-1, y)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x+1, y)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x, y-1)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x, y+1)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    
+    #img_surf = fnt_main.render("Time", True, WHITE)
+    img_surf = fnt_main.render("Time", True, rgb_caption)
     img_rect = img_surf.get_rect()
     img_rect.topleft = (590, 50)
     DISPLAYSURF.blit(img_surf, img_rect)
-    
+
+    # paint the time remaining only if its larger than zero.
     #tmr_str =str(tl -int(to -time.time()))
-    tmr_str =str(tr)
-    if tr >=0:
+    #tmr_str =str(tr)
+    if tr >=0: 
+        tmr_str =str(tr)
         img_surf = fnt_main.render(tmr_str, True, def_col)
         img_rect = img_surf.get_rect()
         img_rect.center = (610, 80)
