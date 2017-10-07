@@ -1789,15 +1789,28 @@ def psp_level_hide():
 #   This routine is used to paint the level on the screen.
 # ---------------------------------------------------------------------------
 def psp_level_paint():
-    # erase old images drawn within the area used to draw the timer.
-    #   - set the default background colur to black.
-    boc =BLACK
-    pygame.draw.rect(DISPLAYSURF, boc, [590, 100, 37, 30])
+##    # erase old images drawn within the area used to show the level number.
+##    #   - set the default background colur to black.
+##    boc =BLACK
+##    pygame.draw.rect(DISPLAYSURF, boc, [590, 100, 37, 30])
 
     # render a new image of remaining time.
+    x, y= 590, 100
+    img_surf = fnt_main.render("Level", True, BLACK)
+    img_rect = img_surf.get_rect()
+    img_rect.topleft = (x -1, y)
+    #x,y =img_rect.center
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x +1, y)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x, y -1)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x, y +1)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    
     img_surf = fnt_main.render("Level", True, WHITE)
     img_rect = img_surf.get_rect()
-    img_rect.topleft = (590, 100)
+    img_rect.topleft = (x, y)
     x,y =img_rect.center
     DISPLAYSURF.blit(img_surf, img_rect)
 
