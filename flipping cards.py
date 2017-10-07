@@ -205,12 +205,20 @@ infoObject = pygame.display.Info()
 ##display_height = int(infoObject.current_h /3)
 
 # display the pygame window in the middle of the screen.
-x =(infoObject.current_w /2) -(WINWIDTH /2)
-y =(infoObject.current_h /2) -(WINHEIGHT /2)
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x, y)
-DISPLAYSURF = pygame.display.set_mode((WINWIDTH, WINHEIGHT), 0, 32)
+try:
+    # lets try and position the gaming window.
+    x =(infoObject.current_w /2) -(WINWIDTH /2)
+    y =(infoObject.current_h /2) -(WINHEIGHT /2)
+    os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x, y)
+    DISPLAYSURF = pygame.display.set_mode((WINWIDTH, WINHEIGHT), 0, 32)
+except:
+    # lets try setting the minimum requirements for our gaming window.
+    DISPLAYSURF = pygame.display.set_mode((640, 480), 0, 32)
 
-pygame.display.set_caption('Flipping Cards')
+try:
+    pygame.display.set_caption('Flipping Cards')
+except:
+    pass
 
 
 # define some RGB colours.
@@ -1070,7 +1078,7 @@ def hstable_load():
 # ---------------------------------------------------------------------------
 def hstable_paint():
     lnmargin =3
-    rmargin =550
+    rmargin =600
     
     y =40
     
@@ -1265,7 +1273,10 @@ def pause_msg(tl, strmsg, def_col=GREEN, flash_msg =False, pauselock =True, fnts
         # we need to blank out the whole area used by the alert message
         # because we're not keeping track of what we last wrote.
         x =0
-        pygame.draw.rect(DISPLAYSURF, BLACK, (x, y, 550, img_rect.height))
+        if WINWIDTH >550:
+            pygame.draw.rect(DISPLAYSURF, BLACK, (x, y, WINWIDTH, img_rect.height))
+        else:
+            pygame.draw.rect(DISPLAYSURF, BLACK, (x, y, 640, img_rect.height))
         # ._
 
         
@@ -1626,7 +1637,8 @@ def stage_play():
         # prepare the screen buffer with a fresh coat of the background image.
         DISPLAYSURF.blit(img_bkgnd_main, img_rect)
         cards_paint_active_cards()
-        psp_score_paint()
+        #psp_score_paint()
+        psp_paint() # paint the player's status panel.
         fpsClock.tick(FPS)
 
     return retval
@@ -1764,9 +1776,13 @@ def playername_get():
 # ---------------------------------------------------------------------------
 def psp_paint(tl =0, to =0):
     psp_score_paint()
-    psp_timer_paint(tl, to)
+    if tl ==0 and to ==0:
+        psp_timer_paint(tl, to, lti =False)
+    else:
+        psp_timer_paint(tl, to)
     psp_level_paint()
     psp_level_paint()
+    psp_round_paint()
 # panel_ply_status() --------------------------------------------------------
 
 
@@ -1829,18 +1845,31 @@ def psp_level_paint():
 #   This routine is used to paint the stage/round on the screen.
 # ---------------------------------------------------------------------------
 def psp_round_paint():
-    # erase old images drawn within the area used to draw the timer.
-    #   - set the default background colur to black.
-    boc =BLACK
-    pygame.draw.rect(DISPLAYSURF, boc, [590, 150, 37, 30])
+##    # erase old images drawn within the area used to display the number of
+##    # the current round.
+##    #   - set the default background colur to black.
+##    boc =BLACK
+##    pygame.draw.rect(DISPLAYSURF, boc, [590, 150, 37, 30])
 
     # render a new image of remaining time.
+    x,y =585, 150
+    img_surf = fnt_main.render("Round", True, BLACK)
+    img_rect = img_surf.get_rect()
+    img_rect.topleft = (x -1, y)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x +1, y)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x, y -1)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x, y +1)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    
     img_surf = fnt_main.render("Round", True, WHITE)
     img_rect = img_surf.get_rect()
-    img_rect.topleft = (590, 150)
+    img_rect.topleft = (x, y)
     x,y =img_rect.center
     DISPLAYSURF.blit(img_surf, img_rect)
-
+    
     img_surf = fnt_main.render(str(gstagecntr), True, WHITE)
     img_rect = img_surf.get_rect()
     img_rect.center = (x, 175)
@@ -1885,11 +1914,16 @@ def psp_score_addtime(tr):
     flash_msg =False
     pauselock =True
     pause_msg(tl, strmsg, def_col, flash_msg, pauselock)
-    
+    img_rect =img_bkgnd_main.get_rect()
     while bp >0: # there are more bonus points to add to the score
         bp -=1                      # reduce the number of bonus points.
         psp_score_addpoints(1, False)   # add a single bonus point to the score.
-        psp_score_paint()               # paint the rendered score to the screen.
+        #psp_score_paint()               # paint the rendered score to the screen.
+        DISPLAYSURF.blit(img_bkgnd_main, img_rect)
+        cards_paint_active_cards()
+        psp_paint() # paint the player's status panel.
+        
+
 
         tl =2
         strmsg =str(bp) +" Time Bonus points"
@@ -1898,8 +1932,8 @@ def psp_score_addtime(tr):
         pauselock =True
         pause_msg(tl, strmsg, def_col, flash_msg, pauselock, pyield =True)
 
-        #pygame.display.flip()
-         
+        pygame.display.flip()
+        fpsClock.tick(FPS) 
     return time_bonus
 # psp_score_addtime(~) ------------------------------------------------------
 
