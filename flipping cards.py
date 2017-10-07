@@ -1915,19 +1915,38 @@ def psp_score_paint():
 
     y =0
     lm =1       # set the line margin.
-    
+
+    x,y =590, 0
+
+    # > Paint a black border around the caption score.
+    img_surf = fnt_main.render("Score", True, BLACK)
+    img_rect = img_surf.get_rect()
+    img_rect.topleft = (x-1, y)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x+1, y)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x, y-1)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    img_rect.topleft = (x, y+1)
+    DISPLAYSURF.blit(img_surf, img_rect)
+    # .
+
+    # > Paint the score caption over the blacked out borders
     img_surf = fnt_main.render("Score", True, WHITE)
     img_rect = img_surf.get_rect()
-    img_rect.topleft = (590, 0)
+    img_rect.topleft = (x, y)
     DISPLAYSURF.blit(img_surf, img_rect)
-
+    # .
+    
     # get ready to paint on the next line.
     y +=img_rect.height
     y +=lm
     
-    # erase the previous displayed number.
-    imgwidth =img_rect.width
-    pygame.draw.rect(DISPLAYSURF, BLACK, (590, y, imgwidth, img_rect.height))
+    ## erase the previous displayed number.
+    #imgwidth =img_rect.width
+    #pygame.draw.rect(DISPLAYSURF, BLACK, (590, y, imgwidth, img_rect.height))
+    # no need to black out the section of screen any more because we are
+    # using a background image.
     
     img_surf = fnt_main.render(str(score), True, WHITE)
     img_rect = img_surf.get_rect()
