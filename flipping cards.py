@@ -231,7 +231,7 @@ YELLOW =(200, 200, 0)
 # _.
 
 
-BASICFONT = pygame.font.Font('freesansbold.ttf', 32)
+#BASICFONT = pygame.font.Font('freesansbold.ttf', 32)
 IMG_CARD_BACK =0
 IMG_CARD_1 =1
 IMG_CARD_2 =2
@@ -855,6 +855,7 @@ def game_init():
     global cardimages, img_bkgnd_main
     global snd_lbegin, snd_gintro, snd_gend, snd_tmrl, click_sound
     global snd_send_ok, snd_send_fail, snd_cards_new
+    global fnt_title, fnt_main
     
 
     score =0
@@ -869,6 +870,11 @@ def game_init():
     hst.append(["Fireman Sam", 150])
     hst.append(["John Travolta", 100])
     # _.
+
+    #fnt_title = pygame.font.Font('freesansbold.ttf', 40)
+    #fnt_main = pygame.font.Font('freesansbold.ttf', 16)
+    fnt_title = wr_load_font('freesansbold.ttf', 40)
+    fnt_main = wr_load_font('freesansbold.ttf', 16)
 
     # -------------------------------------------------------------------------
     # utilise the os library to load our card images to lower the risk of
@@ -970,7 +976,7 @@ def game_end():
     
     snd_gend.play()     # play the sound associated with the end of game.
     
-    fnt_title = pygame.font.Font('freesansbold.ttf', 40)
+    #fnt_title = pygame.font.Font('freesansbold.ttf', 40)
 
     tl =7
     strmsg ="Game Over"
@@ -1200,7 +1206,7 @@ def play_title_screen():
     snd_gintro.play()
     #snd_gintro.music.play()
     
-    fnt_title = pygame.font.Font('freesansbold.ttf', 40)
+    #fnt_title = pygame.font.Font('freesansbold.ttf', 40)
 
     # render the game name.
     img_gn_surf = fnt_title.render("Flipping Cards", True, BLUE)
@@ -1259,8 +1265,9 @@ def pause_msg(tl, strmsg, def_col=GREEN, flash_msg =False, pauselock =True, fnts
     skip_pause =False       # True = the user can end the pause prematurely
     retval = False
     
-    fnt_title = pygame.font.Font('freesansbold.ttf', fntsize)
+    #fnt_title = pygame.font.Font('freesansbold.ttf', fntsize)
     img_surf = fnt_title.render(strmsg, True, def_col)
+    #img_surf =fnt_main.render(strmsg, True, def_col)
     img_rect = img_surf.get_rect()
     img_rect.center = (HALF_WINWIDTH, 400)
 
@@ -1371,7 +1378,7 @@ def stage_ini():
     # reset the placement array.
     cph_clear() # remove the cards from the play area.
 
-    fnt_title = pygame.font.Font('freesansbold.ttf', 20)
+    #fnt_title = pygame.font.Font('freesansbold.ttf', 20)
     
     # render the common text for loosing.
     img_yl_surf = fnt_title.render("You Loose!", True, RED)
@@ -1659,9 +1666,9 @@ def stage_end(nextstage =False):
     lmargine =10
     l = 0               # the text line number.
     
-    fnt_title = pygame.font.Font('freesansbold.ttf', 30)
-    psp_timer_hide()    # remove the timer from view.
-    psp_level_hide()    # remove the level indicator from view.
+    #fnt_title = pygame.font.Font('freesansbold.ttf', 30)
+    #psp_timer_hide()    # remove the timer from view.
+    #psp_level_hide()    # remove the level indicator from view.
 
     cards_turn()        # place all the cards face down.
     cls()               # clear the screen.
@@ -1693,13 +1700,13 @@ def playername_get():
     pygame.draw.rect(DISPLAYSURF, WHITE, (ib_x -5, ib_y -5, ib_width +10, ib_height +10), 3)
 
     # paint the prompt asking the user to enter their name.
-    fnt_title = pygame.font.Font('freesansbold.ttf', 20)
+    #fnt_title = pygame.font.Font('freesansbold.ttf', 20)
     img_msg =fnt_title.render("Please enter your name...", True, BLUE)
     img_rect =img_msg.get_rect()
     DISPLAYSURF.blit(img_msg, img_rect)
 
     # paint the title for the high score.
-    fnt_title = pygame.font.Font('freesansbold.ttf', 40)
+    #fnt_title = pygame.font.Font('freesansbold.ttf', 40)
     img_surf = fnt_title.render("HI SCORE TABLE", True, BLUE)
     img_rect =img_surf.get_rect()
     img_rect.topleft = (HALF_WINWIDTH -int((img_rect.width /2)), 40)
@@ -2101,6 +2108,30 @@ def stype_cph():
 # stype_cph() ---------------------------------------------------------------
     
 
+# --------------------------------------------------------------------
+# Description:
+#   Loads a specified font and returns the active font obj ref if
+#   possible.
+#
+#   The purpose of this wrapper routine is to trap any errors that
+#   might be encountered when selecting a font and resolve issues of
+#   incompatible fonts on different platforms by resorting to the
+#   default font when problems occur.
+# --------------------------------------------------------------------
+def wr_load_font(fnt_name, fnt_size):
+    try:
+        # try and load the desired font.
+        cf =pygame.font.Font(fnt_name, fnt_size)
+    except:
+        try:
+            # resort to loading the default font instead.
+            cf =pygame.font.Font(None, fnt_size)
+        except:
+            cf =None
+    return cf # ref to currently (loaded) font.
+# wr_load_font() --------------------------------------------------------
+
+
 
 # ---------------------------------------------------------------------------
 # Description:
@@ -2153,7 +2184,7 @@ catx = 10
 caty = 10
 direction = 'right'
 
-fnt_main = pygame.font.Font('freesansbold.ttf', 16)
+#fnt_main = pygame.font.Font('freesansbold.ttf', 16)
 fnt_title = 0
 
 # prepare variables that will be used to play sounds.
