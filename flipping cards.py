@@ -1527,7 +1527,7 @@ def stage_play():
                                     card_turn_faceup(crd)
                                     cards_paint_active_cards()
                                     #psp_score_paint()
-                                    psp_paint(tl, to)
+                                    #psp_paint(tl, to)
                                     card_cursor_animate(crd)
                                     
                                     # check if the correct card was turned over.
@@ -1541,14 +1541,18 @@ def stage_play():
                                         end_stage =True
                                         break
                                         
-                                    psp_score_paint()
+                                    #psp_score_paint()
+                                    #psp_paint(tl, to)
                                     
                                     # calc the value of the next card.
                                     card_next +=1 
 
 
-        tr =psp_timer_paint(tl, to)
+        
+        #tr =psp_timer_paint(tl, to)
         #psp_level_paint()
+        #tr =psp_paint(tl, to)
+        tr =psp_timer_paint(tl, to)
         if end_stage !=True:
             # the game hasn't ended due to an incorrect answer.
             
@@ -1645,7 +1649,7 @@ def stage_play():
         DISPLAYSURF.blit(img_bkgnd_main, img_rect)
         cards_paint_active_cards()
         #psp_score_paint()
-        psp_paint() # paint the player's status panel.
+        psp_paint(tl, to) # paint the player's status panel.
         fpsClock.tick(FPS)
 
     return retval
@@ -1784,12 +1788,13 @@ def playername_get():
 def psp_paint(tl =0, to =0):
     psp_score_paint()
     if tl ==0 and to ==0:
-        psp_timer_paint(tl, to, lti =False)
+        tr =psp_timer_paint(tl, to, lti =False)
     else:
-        psp_timer_paint(tl, to)
-    psp_level_paint()
+        tr =psp_timer_paint(tl, to)
+    #psp_level_paint()
     psp_level_paint()
     psp_round_paint()
+    return tr
 # panel_ply_status() --------------------------------------------------------
 
 
