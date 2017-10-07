@@ -30,6 +30,14 @@
 #   [6].    Improved parameter checking
 #
 #   [7].    Added a background.
+#
+#   [8].    Used routine(s) from the os library to resolve path and
+#           filename issues that may result from being run on other
+#           platforms.
+#
+#   [9].    Found a nice bit of code from one of the members in the Python
+#           forum and have found a way to position the game window at the
+#           centre of the screen.
 # -------------------------------------------------------------------------
 # Version 0-20:
 #   [1].    Updated the players status bar to incllude the round as well
@@ -124,7 +132,8 @@ if len(myerrors) >0:
     # game can't run without these.
     fatal_err =True
 
-    
+sys.path.insert(1,'code') # add a folder to the sys path search register ([code] ???).
+
 try:
     from debugfc import cards_debug_print
 except:
@@ -192,6 +201,14 @@ HALF_WINHEIGHT = int(WINHEIGHT / 2)
 fpsClock = pygame.time.Clock()
 
 # set up the window
+infoObject = pygame.display.Info()
+##display_width = int(infoObject.current_w /3)
+##display_height = int(infoObject.current_h /3)
+
+# display the pygame window in the middle of the screen.
+x =(infoObject.current_w /2) -(WINWIDTH /2)
+y =(infoObject.current_h /2) -(WINHEIGHT /2)
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x, y)
 DISPLAYSURF = pygame.display.set_mode((WINWIDTH, WINHEIGHT), 0, 32)
 
 pygame.display.set_caption('Flipping Cards')
@@ -293,21 +310,40 @@ cardimages = []
 ##cardimages.append( pygame.image.load('Images/card - face11.png'))
 ##cardimages.append( pygame.image.load('Images/card - face12.png'))
 
-cardimages.append( pygame.image.load("Images/card - back.png").convert())
-cardimages.append( pygame.image.load('Images/card - face01.png').convert())
-cardimages.append( pygame.image.load('Images/card - face02.png').convert())
-cardimages.append( pygame.image.load('Images/card - face03.png').convert())
-cardimages.append( pygame.image.load('Images/card - face04.png').convert())
-cardimages.append( pygame.image.load('Images/card - face05.png').convert())
-cardimages.append( pygame.image.load('Images/card - face06.png').convert())
-cardimages.append( pygame.image.load('Images/card - face07.png').convert())
-cardimages.append( pygame.image.load('Images/card - face08.png').convert())
-cardimages.append( pygame.image.load('Images/card - face09.png').convert())
-cardimages.append( pygame.image.load('Images/card - face10.png').convert())
-cardimages.append( pygame.image.load('Images/card - face11.png').convert())
-cardimages.append( pygame.image.load('Images/card - face12.png').convert())
+##cardimages.append(pygame.image.load("Images/card - back.png").convert())
+##cardimages.append(pygame.image.load('Images/card - face01.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face02.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face03.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face04.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face05.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face06.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face07.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face08.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face09.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face10.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face11.png').convert())
+##cardimages.append(pygame.image.load('Images/card - face12.png').convert())
 
-img_bkgnd_main =pygame.image.load('Images/sunset.png').convert()
+# include the use of the os library to load our card images to lower the risk of
+# problems occurring while running on other platforms.
+cardimages.append(pygame.image.load(os.path.join("Images", "card - back.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face01.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face02.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face03.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face04.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face05.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face06.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face07.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face08.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face09.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face10.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face11.png")).convert())
+cardimages.append(pygame.image.load(os.path.join("Images", "card - face12.png")).convert())
+
+img_bkgnd_main =pygame.image.load(os.path.join("Images", "sunset.png")).convert()
+
+#sfx['explosion_1'] = pygame.mixer.Sound(os.path.join(header.paths['sounds'],"smallexp.wav"))
+
 
 #cardimages.append(pygame.image.load(os.path.join('Images', 'face12.png')).convert())
 #img = pygame.image.load(os.path.join('C:/Users/Gebruiker/Desktop/Renders', 'Render.png')).convert()
@@ -1183,6 +1219,7 @@ def pause_msg(tl, strmsg, def_col=GREEN, flash_msg =False, pauselock =True, fnts
                     if event.key == K_ESCAPE:
                         pygame.quit()
                         sys.exit()
+                        #quit()
             
         tr_prev =tr
         
