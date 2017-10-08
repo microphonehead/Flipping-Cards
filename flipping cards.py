@@ -38,6 +38,12 @@
 #   [9].    Found a nice bit of code from one of the members in the Python
 #           forum and have found a way to position the game window at the
 #           centre of the screen.
+#
+#   [10].   Updated the screen refresh method, painting the players
+#           status panel, and the message alert area.
+#
+#   [11].   Updated the way the cards are highlighted in the process of
+#           turning them over.
 # -------------------------------------------------------------------------
 # Version 0-20:
 #   [1].    Updated the players status bar to incllude the round as well
@@ -657,6 +663,9 @@ def card_cursor_animate(crd):
 
     scrn=DISPLAYSURF
     incval =50
+
+
+    img_rect =img_bkgnd_main.get_rect()
     
     for reps in range(1):
         r, g, b =0, 0, 0
@@ -680,39 +689,57 @@ def card_cursor_animate(crd):
                 b =rgb_b
             
             #fcol =(rgb_r, rgb_g, rgb_b)
+
+            # prepare the screen buffer with a fresh coat of the background image.
+            DISPLAYSURF.blit(img_bkgnd_main, img_rect)
+            cards_paint_active_cards()
+            psp_paint(tl, to)               # paint the player's status panel.
+            
+        
             pygame.draw.rect(scrn, (r, g, b), (crd.x -i, crd.y -i, crd.width +(i*2), crd.height +(i*2)), 3)
             pygame.display.flip()
-            pygame.time.wait(50)
-            pygame.draw.rect(scrn, BLACK, (crd.x -i, crd.y -i, crd.width +(i*2), crd.height +(i*2)), 3)
+            fpsClock.tick(FPS)
+            #pygame.time.wait(50)
+            #pygame.draw.rect(scrn, BLACK, (crd.x -i, crd.y -i, crd.width +(i*2), crd.height +(i*2)), 3)
                 
             i =(i * 1.6)
-            incval -=10
+            #incval -=10
+            incval -=3
+            if incval <1: incval =1
 
         incval =50 # reset the incremental value.
         
-        # perform the fade-out operation.    
-        for a in range(6):
-            #r -=30
-            #g -=30
-            #b -=30
-
-            r -=incval
-            g -=incval
-            b -=incval
-            if r <1:
-                r =0
-            if g <1:
-                g =0
-            if b <1:
-                b =0
-            pygame.draw.rect(scrn, (r, g, b), (crd.x -i, crd.y -i, crd.width +(i*2), crd.height +(i*2)), 3)
-            pygame.display.flip()
-            pygame.time.wait(100)
-            pygame.draw.rect(scrn, BLACK, (crd.x -i, crd.y -i, crd.width +(i*2), crd.height +(i*2)), 3)
-            if (r <1) and (g <1) and (b <1):
-                break
-
-            incval -=5
+##        # perform the fade-out operation.    
+##        for a in range(6):
+##            #r -=30
+##            #g -=30
+##            #b -=30
+##
+##            r -=incval
+##            g -=incval
+##            b -=incval
+##            if r <1:
+##                r =0
+##            if g <1:
+##                g =0
+##            if b <1:
+##                b =0
+##
+##            # prepare the screen buffer with a fresh coat of the background image.
+##            DISPLAYSURF.blit(img_bkgnd_main, img_rect)
+##            cards_paint_active_cards()
+##            psp_paint(tl, to)               # paint the player's status panel.
+##            
+##            
+##            pygame.draw.rect(scrn, (r, g, b), (crd.x -i, crd.y -i, crd.width +(i*2), crd.height +(i*2)), 3)
+##            pygame.display.flip()
+##            fpsClock.tick(FPS)
+##            #pygame.time.wait(100)
+##            #pygame.draw.rect(scrn, BLACK, (crd.x -i, crd.y -i, crd.width +(i*2), crd.height +(i*2)), 3)
+##            if (r <1) and (g <1) and (b <1):
+##                break
+##
+##            incval -=5
         
 # card_cursor_animate(~) -----------------------------------------------------
 
@@ -1755,7 +1782,7 @@ def playername_get():
                     else:
                         pname =""
                     nc =True
-                elif chr(event.key) in ("_-0123456789abcdefghijklmnopqrstuvwxyz "):
+                elif chr(event.key) in ("_-:.0123456789abcdefghijklmnopqrstuvwxyz "):
                     # the player pressed an acceptable key for their name.
                     if len(pname) <20:
                         plyri =event.key
