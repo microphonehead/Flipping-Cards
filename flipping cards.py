@@ -201,6 +201,11 @@ try:
 except:
     myerrors.append("Error initialising the pygame library.")
 
+try:
+    from menu import MnuCntrl
+except:
+    myerrors.append("Error importing library: menu.")
+
 
 FPS = 30 # frames per second setting
 #FPS = 3 # frames per second setting
@@ -1113,8 +1118,9 @@ def hstable_load():
 
 
 # ---------------------------------------------------------------------------
-# Summary:
-#   This rountine paints the hi-score table.
+# Description:
+#   This rountine paints the hi-score table and then waits a few seconds
+#   before clearing the screen.
 # ---------------------------------------------------------------------------
 def hstable_paint():
     lnmargin =3
@@ -1227,6 +1233,57 @@ def level_end():
 
     cls()
 # level_end() ---------------------------------------------------------------
+
+
+
+# ---------------------------------------------------------------------------
+# Description:
+#   Creates the main menu and gets the user selection.
+#
+# Return(s):
+#   The caption of the select menu item.
+# ---------------------------------------------------------------------------
+def main_menu():
+    menu_main =MnuCntrl() # create a new menu object.
+    menu_main.__init__()
+
+    # attempt to load a font and let the routine handle/resolve
+    # any errors.
+    fnt_header =wr_load_font('freesansbold.ttf', 30)
+
+    # >. Lets setup a line margin of 20 pixels per menu item and use it to
+    # calculate the y position for the next menu item.
+    ln_margin =20 # set the line margin.
+
+    # Draw the menu caption on the 
+    img_hdr_surf = fnt_header.render("Flipping Cards", True, BLUE)
+    img_rect =img_hdr_surf.get_rect()
+    x, y = HALF_WINWIDTH, 25
+    img_rect.center = (x, y)
+    DISPLAYSURF.blit(img_hdr_surf, img_rect)
+    # _.
+
+    # add menu items ...
+    x, y = 20, 80
+    menu_main.add_item(x, y, item_caption ="Play Game")
+
+    y +=60 + ln_margin
+    menu_main.add_item(x, y, "Hi Scores Table", (255, 255))
+    
+    #y +=60 + ln_margin
+    #menu_main.add_item(x, y, "Help", WHITE)
+    
+    y +=60 + ln_margin
+    menu_main.add_item(x, y, item_caption ="Quit")
+
+    menu_main.paint()
+    mnu_option =menu_main.wait_ui()
+
+    menuitem_sel =mnu_option[5]
+    del menu_main # destroy the control and free memory.
+
+    return menuitem_sel
+# main_menu() ---------------------------------------------------------------
 
 
 
@@ -2219,9 +2276,9 @@ def wr_say(voice):
 
 
 
-catx = 10
-caty = 10
-direction = 'right'
+##catx = 10
+##caty = 10
+##direction = 'right'
 
 #fnt_main = pygame.font.Font('freesansbold.ttf', 16)
 fnt_title = 0
@@ -2247,37 +2304,74 @@ tmr_str =""
 
 game_init() # initialise the game.
 
+##exitgame =False
+##while exitgame ==False:
+##    #play_title_screen()
+##    
+##    game_begin()
+##    play_title_screen()
+##
+##    #print( playername_get() )
+##    
+##    ls =True # trigger flag so we can enter loop.
+##    while ls ==True:
+##        
+##        tsil = (glevel * 2)     # calc total stages in level.
+##        
+##        level_ini()
+##        level_begin()
+##        ls =level_play()
+##        level_end()
+##
+##        glevel +=1
+##
+##    #score +=1000   # add cheat so we can get on the high score table.
+##    
+##    if score >hstable_min_get(): # we have a new high score
+##        new_name =playername_get()
+##        hstable_insert(new_name, score)
+##        hstable_save()  # save the hs table.
+##        
+##    game_end()
+    
 exitgame =False
 while exitgame ==False:
-    #play_title_screen()
-    
     game_begin()
     play_title_screen()
+    menu_item =main_menu()
 
-    #print( playername_get() )
-    
-    ls =True # trigger flag so we can enter loop.
-    while ls ==True:
+    if menu_item =="Play Game":
+        ls =True # trigger flag so we can enter loop.
+        while ls ==True:
+            
+            tsil = (glevel * 2)     # calc total stages in level.
+            
+            level_ini()
+            level_begin()
+            ls =level_play()
+            level_end()
+
+            glevel +=1
+
+        #score +=1000   # add cheat so we can get on the high score table.
         
-        tsil = (glevel * 2)     # calc total stages in level.
+        if score >hstable_min_get(): # we have a new high score
+            new_name =playername_get()
+            hstable_insert(new_name, score)
+            hstable_save()  # save the hs table.
+            
+    elif menu_item =="Hi Scores Table":
+        hstable_paint()
+    #elif menu_item =="Help":
+    #    pass
+    elif menu_item =="Quit":
+        game_end()
         
-        level_ini()
-        level_begin()
-        ls =level_play()
-        level_end()
-
-        glevel +=1
-
-    #score +=1000   # add cheat so we can get on the high score table.
     
-    if score >hstable_min_get(): # we have a new high score
-        new_name =playername_get()
-        hstable_insert(new_name, score)
-        hstable_save()  # save the hs table.
         
     game_end()
-    
 
+    
 print("Player scored ", score)
 # ---------------------------------------------------------------------------
 

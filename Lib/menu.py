@@ -345,12 +345,19 @@ class MnuCntrl():
                 cf =pygame.font.Font(None, fnt_size)
             except:
                 cf =None
+        print()
+        print("menu.py - Class MnuCntrl().wr_load_font - Font =", cf)
+        print()
+        
         return cf # ref to currently (loaded) font.
     # wr_load_font() --------------------------------------------------------
 
     # using a dictionary object to make the variable data persistant (???)
-    menu_def_list["items font"] =wr_load_font('freesansbold.ttf', 60)
-    menu_def_list["header font"] =wr_load_font('freesansbold.ttf', 30)
+##    menu_def_list["items font"] =wr_load_font('freesansbold.ttf', 60)
+##    menu_def_list["header font"] =wr_load_font('freesansbold.ttf', 30)
+    menu_def_list["items font"] =pygame.font.Font('freesansbold.ttf', 60)
+    menu_def_list["header font"] =pygame.font.Font('freesansbold.ttf', 30)
+    
     menu_def_list["active colour"] =YELLOW
     menu_def_list["inactive colour"] =WHITE
     
@@ -376,7 +383,7 @@ if __name__ == '__main__':
     ln_margin =20 # set the line margin.
 
     # Draw the menu caption on the 
-    img_hdr_surf = fnt_header.render("Flipping Cards", True, BLUE)
+    img_hdr_surf = fnt_header.render("Menu Control", True, BLUE)
     img_rect =img_hdr_surf.get_rect()
     x, y = HALF_WINWIDTH, 25
     img_rect.center = (x, y)
