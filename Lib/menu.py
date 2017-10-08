@@ -19,27 +19,11 @@ if __name__ == '__main__':
     myerrors =[]
 
 
-##    try:
-##        import random
-##    except:
-##        #print("FATAL ERROR"
-##        #print("Failed to import one or more core libries.")
-##        myerrors.append("Error importing library: random.")
-
     try:
         import pygame
     except:
         myerrors.append("Error importing library: pygame.")
         
-##    try:
-##        import sys
-##    except:
-##        myerrors.append("Error importing library: sys.")
-
-##    try:
-##        import time
-##    except:
-##        myerrors.append("Error importing library: time.")
 
     try:
         from pygame.locals import *
@@ -54,26 +38,6 @@ if __name__ == '__main__':
         fatal_err =True
 
         
-##    try:
-##        from debugfc import cards_debug_print
-##    except:
-##        myerrors.append("Error importing library: debugfc.")
-##
-##    try:
-##        from debugfc import debug_hst
-##    except:
-##        myerrors.append("Error importing library: debugfc.")
-##
-##    try:
-##        from debugfc import deck_debug_print
-##    except:
-##        myerrors.append("Error importing library: debugfc.")
-##
-##    try:
-##        from espeak import espeak
-##    except:
-##        myerrors.append("Error importing library: espeak.")
-
     if len(myerrors) >0: # there were errors.
         print("WARNING!")
         if fatal_err ==False:
@@ -106,34 +70,6 @@ if __name__ == '__main__':
 
 
 
-    # --> This bit of code is not required as part of the library <--
-        
-##    # --------------------------------------------------------------------
-##    # Description:
-##    #   Loads a specified font and returns the active font obj ref if
-##    #   possible.
-##    #
-##    #   The purpose of this wrapper routine is to trap any errors that
-##    #   might be encountered when selecting a font and resolve issues of
-##    #   incompatible fonts on different platforms by resorting to the
-##    #   default font when problem occur.
-##    # --------------------------------------------------------------------
-##    def wr_load_font(fnt_name, fnt_size):
-##        try:
-##            # try and load the desired font.
-##            cf =pygame.font.Font(fnt_name, fnt_size)
-##        except:
-##            try:
-##                # resort to loading the default font instead.
-##                cf =pygame.font.Font(None, fnt_size)
-##            except:
-##                cf =None
-##        return cf # ref to currently (loaded) font.
-##    # wr_load_font() --------------------------------------------------------
-
-
-
-
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
 # >> This is the class that needs to imported to make text based menus <<
 # +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
@@ -159,23 +95,31 @@ if __name__ == '__main__':
 #   a problem by ensure its not country indepenndant.
 # --------------------------------------------------------------------
 class MnuCntrl():
-##    # load the default fonts.
-##    def_mnuitems_font =wr_load_font('freesansbold.ttf', 60)
-##    def_mnuhdr_font =wr_load_font('freesansbold.ttf', 30)
-##    def_items_col_active =YELLOW
-##    def_items_col_inactive =WHITE
-##    
-##    mnu_item_cntrls = [] # prep list for menu items.
 
+    # load the default fonts.
+    print()
+    print("Class MnuCntrl()")
+    print("\tLoading menu fonts.")
+    print()
+            
+    menu_def_list ={} # create a dictionary of default values to be used.        
+    mnu_item_cntrls = [] # prep list for menu items.
+    
     # --------------------------------------------------------------------
     def __init__(self):
         # init def fonts to use with the menu.
-        self.mnuhdr =MnuCntrl.def_mnuhdr_font 
-        self.mnuitems_font =MnuCntrl.def_mnuitems_font
         
-        # init def colours for active and inactive menu items.
-        self.items_col_active =MnuCntrl.def_items_col_active
-        self.items_col_inactive =MnuCntrl.def_items_col_inactive
+        self.mnuhdr =MnuCntrl.menu_def_list["header font"] 
+        self.mnuitems_font =MnuCntrl.menu_def_list["items font"]
+        
+        self.items_col_active =MnuCntrl.menu_def_list["active colour"]
+        self.items_col_inactive =MnuCntrl.menu_def_list["inactive colour"]
+
+        print()
+        print("Class MnuCntrl()")
+        print("\tMenu header font =",MnuCntrl.menu_def_list["header font"])
+        print("\tMenu item font =",MnuCntrl.menu_def_list["items font"])
+        print()
     # __init__() ---------------------------------------------------------
                 
     # --------------------------------------------------------------------
@@ -230,9 +174,7 @@ class MnuCntrl():
                 txt_colour =self.items_col_inactive
                 print("Resorted to using the default menu colour for a menu item control")
 
-       
-        #print("Obj type of txt_colour =", type(txt_colour), " size =", len(txt_colour))
-            
+                           
         # lets add image refs ...
         #   - the colour of menu item text not clicked.
         #   - the colour of the bevel for the menu item.
@@ -406,13 +348,12 @@ class MnuCntrl():
         return cf # ref to currently (loaded) font.
     # wr_load_font() --------------------------------------------------------
 
-    # load the default fonts.
-    def_mnuitems_font =wr_load_font('freesansbold.ttf', 60)
-    def_mnuhdr_font =wr_load_font('freesansbold.ttf', 30)
-    def_items_col_active =YELLOW
-    def_items_col_inactive =WHITE
+    # using a dictionary object to make the variable data persistant (???)
+    menu_def_list["items font"] =wr_load_font('freesansbold.ttf', 60)
+    menu_def_list["header font"] =wr_load_font('freesansbold.ttf', 30)
+    menu_def_list["active colour"] =YELLOW
+    menu_def_list["inactive colour"] =WHITE
     
-    mnu_item_cntrls = [] # prep list for menu items.
 # Class MnuCntrl() --------------------------------------------------------
  
 
