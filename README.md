@@ -1,5 +1,5 @@
 # Flipping-Cards
-A very smalll game that challenges a player to reveal a set of cards in the correct order.
+A smalll game that challenges a player to reveal a set of cards in the correct order.
 
 Minimum Requirements
 ------------
